@@ -30,8 +30,7 @@
     self.screenNameLabel.text = [@"@" stringByAppendingString:self.tweet.user.screenName];
     self.dateLabel.text = self.tweet.createdAtDate;
     self.tweetContentLabel.text = self.tweet.contentText;
- //   [self.profilePictureView setImageWithURL:self.tweet.user.profileURL];
-    
+
     // set profile picture with fade
     if (self.tweet.user.profileURL != nil) {
         NSURLRequest *request = [NSURLRequest requestWithURL:self.tweet.user.profileURL];
@@ -56,6 +55,15 @@
     // set retweet and favorite counts;
     [self.retweetButton setTitle:[NSString stringWithFormat:@"%d", self.tweet.retweetCount] forState:UIControlStateNormal];
     [self.favoriteButton setTitle:[NSString stringWithFormat:@"%d", self.tweet.favoriteCount] forState:UIControlStateNormal];
+    
+    if (self.tweet.isRetweeted)
+        self.retweetButton.selected = YES;
+    else
+        self.retweetButton.selected = NO;
+    if (self.tweet.isFavorited)
+        self.favoriteButton.selected = YES;
+    else
+        self.favoriteButton.selected = NO;
 }
 - (IBAction)didTapReply:(id)sender {
 }
@@ -63,9 +71,6 @@
 - (IBAction)didTapRetweet:(id)sender {
     NSLog(@"Retweet button tapped");
     [self.tweet toggleIsRetweeted];
-    
-    // flip the "selected" boolean property
-    self.retweetButton.selected = !self.retweetButton.selected;
     
     // reload the cell to update the contents of the tweet
     [self refreshData];
@@ -107,7 +112,5 @@
 - (void)refreshData {
     [self setTweet:self.tweet];
 }
-
-
 
 @end
