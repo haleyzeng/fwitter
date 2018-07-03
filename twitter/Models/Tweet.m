@@ -10,6 +10,22 @@
 
 @implementation Tweet
 
+- (void)toggleIsRetweeted {
+    NSLog(@"toggling isRetweeted locally...");
+    if (self.isRetweeted) self.retweetCount -= 1;
+    else self.retweetCount += 1;
+    
+    self.isRetweeted = !self.isRetweeted;
+}
+
+- (void)toggleIsFavorited {
+    NSLog(@"toggling isFavorited locally...");
+    if (self.isFavorited) self.favoriteCount -= 1;
+    else self.favoriteCount += 1;
+    
+    self.isFavorited = !self.isFavorited;
+}
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     self = [super init];
     
@@ -30,10 +46,11 @@
         self.user = [[User alloc] initWithDictionary:dictionary[@"user"]];
         self.idString = dictionary[@"id_str"];
         self.contentText = dictionary[@"text"];
-        self.retweetCount = (int) dictionary[@"retweet_count"];
-        self.favoriteCount = (int) dictionary[@"favorite_count"];
-        self.isRetweeted = dictionary[@"retweeted"];
-        self.isFavorited = dictionary[@"favorited"];
+        self.retweetCount = [dictionary[@"retweet_count"] intValue];
+        self.favoriteCount = [dictionary[@"favorite_count"] intValue];
+        NSLog(@"Favorite count: %d", self.favoriteCount);
+        self.isRetweeted = [dictionary[@"retweeted"] boolValue];
+        self.isFavorited = [dictionary[@"favorited"] boolValue];
 
         // set created at property with formatting
         NSString *createdAtDateOriginalString = dictionary[@"created_at"];

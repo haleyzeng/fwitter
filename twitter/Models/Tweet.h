@@ -26,4 +26,7 @@
 
 + (NSMutableArray *)tweetsWithArray:(NSArray *)dictionaries;
 
+- (void)toggleIsFavorited;
+- (void)toggleIsRetweeted;
+
 @end

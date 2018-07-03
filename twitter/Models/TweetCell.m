@@ -8,6 +8,7 @@
 
 #import "TweetCell.h"
 #import "UIImageView+AFNetworking.h"
+#import "APIManager.h"
 
 @implementation TweetCell
 
@@ -25,12 +26,11 @@
 - (void)setTweet:(Tweet *)tweet {
     _tweet = tweet;
     
-    
     self.displayNameLabel.text = self.tweet.user.name;
     self.screenNameLabel.text = [@"@" stringByAppendingString:self.tweet.user.screenName];
     self.dateLabel.text = self.tweet.createdAtDate;
     self.tweetContentLabel.text = self.tweet.contentText;
-    [self.profilePictureView setImageWithURL:self.tweet.user.profileURL];
+ //   [self.profilePictureView setImageWithURL:self.tweet.user.profileURL];
     
     // set profile picture with fade
     if (self.tweet.user.profileURL != nil) {
@@ -53,6 +53,61 @@
         } failure:^(NSURLRequest *request, NSHTTPURLResponse * response, NSError *error) {}];
     }
     
+    // set retweet and favorite counts;
+    [self.retweetButton setTitle:[NSString stringWithFormat:@"%d", self.tweet.retweetCount] forState:UIControlStateNormal];
+    [self.favoriteButton setTitle:[NSString stringWithFormat:@"%d", self.tweet.favoriteCount] forState:UIControlStateNormal];
 }
+- (IBAction)didTapReply:(id)sender {
+}
+
+- (IBAction)didTapRetweet:(id)sender {
+    NSLog(@"Retweet button tapped");
+    [self.tweet toggleIsRetweeted];
+    
+    // flip the "selected" boolean property
+    self.retweetButton.selected = !self.retweetButton.selected;
+    
+    // reload the cell to update the contents of the tweet
+    [self refreshData];
+    
+    [[APIManager shared] postRetweetStatus:self.tweet withCompletion:^(Tweet *tweet, NSError *error) {
+        if (error) {
+            NSLog(@"Error changing retweet status: %@", error.localizedDescription);
+        }
+        else {
+            NSLog(@"Successfully changed retweet status");
+        }
+    }];
+    
+    
+}
+
+- (IBAction)didTapFavorite:(id)sender {
+    NSLog(@"Favorite button tapped");
+    [self.tweet toggleIsFavorited];
+    
+    // flip the "selected" boolean property
+    self.favoriteButton.selected = !self.favoriteButton.selected;
+    
+    // reload the cell to update the contents of the tweet
+    [self refreshData];
+    
+    [[APIManager shared] postFavoriteStatus:self.tweet withCompletion:^(Tweet *tweet, NSError *error) {
+        if (error) {
+            NSLog(@"Error changing favorite status: %@", error.localizedDescription);
+        }
+        else {
+            NSLog(@"Successfully changed favorite status");
+        }
+    }];
+     
+     
+}
+
+- (void)refreshData {
+    [self setTweet:self.tweet];
+}
+
+
 
 @end

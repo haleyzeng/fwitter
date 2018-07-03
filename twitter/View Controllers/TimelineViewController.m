@@ -10,8 +10,9 @@
 #import "APIManager.h"
 #import "Tweet.h"
 #import "TweetCell.h"
+#import "ComposeViewController.h"
 
-@interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate>
 
 @end
 
@@ -27,7 +28,11 @@
     
     // initialize refresh controller
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    
+    // attach refresh controller to refresh functionality
     [refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
+    
+    // add 
     [self.tableView insertSubview:refreshControl atIndex:0];
 }
 
@@ -38,8 +43,8 @@
             NSLog(@"Successfully loaded home timeline");
             self.timelineTweets = tweets;
             for (Tweet *tweet in self.timelineTweets) {
-                NSString *text = tweet.contentText;
-                NSLog(@"TWEET: %@", text);
+                BOOL text = tweet.isFavorited;
+                NSLog(@"Tweet isFavorited: %d", text);
             }
             NSLog(@"---------------------------");
         } else {
@@ -73,15 +78,28 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
+- (void)didTweet:(Tweet *)tweet {
+    [self fetchTimeline];
+}
+
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+     UINavigationController *navigationController = [segue destinationViewController];
+    
+    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+    composeController.delegate = self;
+    
 }
-*/
+
+
+
+
 
 
 
