@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		557D7B17F5D2B5715B705AA9 /* libPods-twitter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D6142D6F34C1AE98EE4951 /* libPods-twitter.a */; };
+		5DB46B1B20EAC6C60088B257 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DB46B1A20EAC6C60088B257 /* User.m */; };
+		5DB46B1E20EAC8AC0088B257 /* Tweet.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DB46B1D20EAC8AC0088B257 /* Tweet.m */; };
+		5DECB5D020EBE00500DE6DFF /* TweetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DECB5CF20EBE00500DE6DFF /* TweetCell.m */; };
 		6AD278DA20BC4B950085BC29 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD278D920BC4B950085BC29 /* AppDelegate.m */; };
 		6AD278E020BC4B950085BC29 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AD278DE20BC4B950085BC29 /* Main.storyboard */; };
 		6AD278E220BC4B970085BC29 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6AD278E120BC4B970085BC29 /* Assets.xcassets */; };
@@ -22,6 +25,12 @@
 /* Begin PBXFileReference section */
 		1397EA94AE1DE5F26C1724FD /* Pods-twitter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twitter.release.xcconfig"; path = "Pods/Target Support Files/Pods-twitter/Pods-twitter.release.xcconfig"; sourceTree = "<group>"; };
 		43D6142D6F34C1AE98EE4951 /* libPods-twitter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-twitter.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5DB46B1920EAC6C60088B257 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		5DB46B1A20EAC6C60088B257 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		5DB46B1C20EAC8AC0088B257 /* Tweet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tweet.h; sourceTree = "<group>"; };
+		5DB46B1D20EAC8AC0088B257 /* Tweet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tweet.m; sourceTree = "<group>"; };
+		5DECB5CE20EBE00500DE6DFF /* TweetCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TweetCell.h; sourceTree = "<group>"; };
+		5DECB5CF20EBE00500DE6DFF /* TweetCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TweetCell.m; sourceTree = "<group>"; };
 		6AD278D520BC4B950085BC29 /* twitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = twitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AD278D820BC4B950085BC29 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6AD278D920BC4B950085BC29 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -111,6 +120,12 @@
 		6AD278F820BCBC140085BC29 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5DB46B1920EAC6C60088B257 /* User.h */,
+				5DB46B1A20EAC6C60088B257 /* User.m */,
+				5DB46B1C20EAC8AC0088B257 /* Tweet.h */,
+				5DB46B1D20EAC8AC0088B257 /* Tweet.m */,
+				5DECB5CE20EBE00500DE6DFF /* TweetCell.h */,
+				5DECB5CF20EBE00500DE6DFF /* TweetCell.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -234,8 +249,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DECB5D020EBE00500DE6DFF /* TweetCell.m in Sources */,
 				6AD278F320BCA6020085BC29 /* BDBOAuth1SessionManager+SFAuthenticationSession.m in Sources */,
+				5DB46B1B20EAC6C60088B257 /* User.m in Sources */,
 				6AD278E820BC4B970085BC29 /* main.m in Sources */,
+				5DB46B1E20EAC8AC0088B257 /* Tweet.m in Sources */,
 				6AD2790620BCC0380085BC29 /* LoginViewController.m in Sources */,
 				6AD278DA20BC4B950085BC29 /* AppDelegate.m in Sources */,
 				6AD278F620BCB68B0085BC29 /* APIManager.m in Sources */,
@@ -381,13 +399,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QG5695H4LD;
 				INFOPLIST_FILE = twitter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.codepath.twitter;
+				PRODUCT_BUNDLE_IDENTIFIER = haleyzeng.fwitter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -399,13 +417,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QG5695H4LD;
 				INFOPLIST_FILE = twitter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.codepath.twitter;
+				PRODUCT_BUNDLE_IDENTIFIER = haleyzeng.fwitter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
