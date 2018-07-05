@@ -9,7 +9,7 @@
 #import "ComposeViewController.h"
 #import "APIManager.h"
 
-@interface ComposeViewController ()
+@interface ComposeViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *composeTextView;
 
 @end
@@ -18,7 +18,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.composeTextView.delegate = self;
+    
     // Do any additional setup after loading the view.
+}
+
+// returns whether or not to change the text
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    int characterLimit = 140;
+    NSString *newText = [self.composeTextView.text stringByReplacingCharactersInRange:range withString:text];
+    return newText.length < characterLimit;
 }
 
 - (void)didReceiveMemoryWarning {

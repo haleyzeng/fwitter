@@ -28,7 +28,7 @@
     
     self.displayNameLabel.text = self.tweet.user.name;
     self.screenNameLabel.text = [@"@" stringByAppendingString:self.tweet.user.screenName];
-    self.dateLabel.text = self.tweet.createdAtDate;
+    self.dateLabel.text = self.tweet.createdAtDateRelative;
     self.tweetContentLabel.text = self.tweet.contentText;
 
     // set profile picture with fade
@@ -69,8 +69,14 @@
 }
 
 - (IBAction)didTapRetweet:(id)sender {
+    [self handleRetweet];
+}
+
+- (void)handleRetweet {
     NSLog(@"Retweet button tapped");
     [self.tweet toggleIsRetweeted];
+    
+    self.retweetButton.selected = !self.retweetButton.selected;
     
     // reload the cell to update the contents of the tweet
     [self refreshData];
@@ -83,11 +89,13 @@
             NSLog(@"Successfully changed retweet status");
         }
     }];
-    
-    
 }
 
 - (IBAction)didTapFavorite:(id)sender {
+    [self handleFavorite];
+}
+
+- (void)handleFavorite {
     NSLog(@"Favorite button tapped");
     [self.tweet toggleIsFavorited];
     

@@ -60,13 +60,13 @@
         NSDate *date = [formatter dateFromString:createdAtDateOriginalString];
         // convert date to string with relative date
         // ex. 5s, 3h
+        
+        formatter.dateStyle = NSDateFormatterShortStyle;
+        formatter.timeStyle = NSDateFormatterShortStyle;
+        self.createdAtDateAbsolute = [formatter stringFromDate:date];
+        
         NSString *relativeDate = [NSDate shortTimeAgoSinceDate:date];
-        
-      // formatter.dateStyle = NSDateFormatterShortStyle;
-       // formatter.timeStyle = NSDateFormatterNoStyle;
-      // self.createdAtDate = [formatter stringFromDate:date];
-        
-        self.createdAtDate = relativeDate;
+        self.createdAtDateRelative = relativeDate;
     }
     
     return self;

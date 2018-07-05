@@ -14,7 +14,8 @@
 @property (nonatomic, strong) NSString *idString;
 @property (nonatomic, strong) User *user;
 @property (nonatomic, strong) NSString *contentText;
-@property (nonatomic, strong) NSString *createdAtDate;
+@property (nonatomic, strong) NSString *createdAtDateRelative;
+@property (nonatomic, strong) NSString *createdAtDateAbsolute;
 @property (nonatomic) int retweetCount;
 @property (nonatomic) int favoriteCount;
 @property (nonatomic) BOOL isRetweeted;

@@ -13,8 +13,9 @@
 #import "ComposeViewController.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "TweetDetailViewController.h"
 
-@interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate, UIScrollViewDelegate>
+@interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate, UIScrollViewDelegate, TweetDetailViewControllerDelegate>
 
 @property (assign, nonatomic) BOOL isMoreDataLoading;
 
@@ -105,11 +106,19 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+// tweeted from compose view
 - (void)didTweet:(Tweet *)tweet {
     [self fetchTimeline];
 }
 
+- (void)didTapRetweetInDetailView:(TweetCell *)cell {
+    NSLog(@"Retweet in detail view tapped");
+    [cell handleRetweet];
+}
+
+- (void)didTapFavoriteInDetailView:(TweetCell *)cell {
+    [cell handleFavorite];
+}
 
 - (IBAction)didTapLogout:(id)sender {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -126,12 +135,22 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-     UINavigationController *navigationController = [segue destinationViewController];
     
-    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
-    composeController.delegate = self;
+    // segue from tapping a tweet to the detail view
+    if ([segue.identifier isEqualToString:@"tweetDetail"]) {
+        TweetCell *tappedCell = sender;
+        TweetDetailViewController *tweetDetailViewController = [segue destinationViewController];
+        tweetDetailViewController.sourceCell = tappedCell;
+        tweetDetailViewController.tweet = tappedCell.tweet;
+        tweetDetailViewController.delegate = self;
+    }
+    // segue from tapping compose button to compose screen
+    else {
+        UINavigationController *navigationController = [segue destinationViewController];
     
+        ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+        composeController.delegate = self;
+    }
 }
 
 

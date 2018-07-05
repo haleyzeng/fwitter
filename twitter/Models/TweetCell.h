@@ -22,4 +22,7 @@
 
 @property (strong, nonatomic) Tweet *tweet;
 
+- (void)handleRetweet;
+- (void)handleFavorite;
+
 @end
