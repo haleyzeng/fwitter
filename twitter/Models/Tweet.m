@@ -7,6 +7,7 @@
 //
 
 #import "Tweet.h"
+#import "DateTools.h"
 
 @implementation Tweet
 
@@ -52,14 +53,16 @@
         self.isRetweeted = [dictionary[@"retweeted"] boolValue];
         self.isFavorited = [dictionary[@"favorited"] boolValue];
 
-        // set created at property with formatting
+        // get createdAt data
         NSString *createdAtDateOriginalString = dictionary[@"created_at"];
+        // convert string to formatted Date
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
         NSDate *date = [formatter dateFromString:createdAtDateOriginalString];
-        formatter.dateStyle = NSDateFormatterShortStyle;
-        formatter.timeStyle = NSDateFormatterNoStyle;
-        self.createdAtDate = [formatter stringFromDate:date];
+        // convert date to string with relative date
+        // ex. 5s, 3h
+        NSString *relativeDate = [NSDate shortTimeAgoSinceDate:date];
+        self.createdAtDate = relativeDate;
     }
     
     return self;
