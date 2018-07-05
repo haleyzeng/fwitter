@@ -48,29 +48,21 @@ static NSString * const consumerSecret = @"uuaB1tnnrhggOHP1D2UWmoqrWdgjcfTmZZ5rB
     return self;
 }
 
-- (void)getHomeTimelineWithCompletion:(void(^)(NSArray *tweets, NSError *error))completion {
+- (void)getHomeTimelineOlderThan:(NSString *)tweetID withCompletion:(void(^)(NSArray *tweets, NSError *error))completion {
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary new];
+    [parameters setObject:@20 forKey:@"count"];
+    if (tweetID)
+        [parameters setObject:tweetID forKey:@"max_id"];
+    
     [self GET:@"1.1/statuses/home_timeline.json"
-    parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
+    parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
       //  NSLog(@"The return of the API Call: %@", tweetDictionaries);
        NSArray *tweets = [Tweet tweetsWithArray:tweetDictionaries];
- /*
-       // Manually cache the tweets. If the request fails, restore from cache if possible.
-       NSData *data = [NSKeyedArchiver archivedDataWithRootObject:tweets];
-       [[NSUserDefaults standardUserDefaults] setValue:data forKey:@"hometimeline_tweets"];
-*/
        completion(tweets, nil);
        
    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-      
-       NSArray *tweets = nil;
- /*
-       // Fetch tweets from cache if possible
-       NSData *data = [[NSUserDefaults standardUserDefaults] valueForKey:@"hometimeline_tweets"];
-       if (data != nil) {
-           tweets = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-       }*/
-       
-       completion(tweets, error);
+       completion(nil, error);
    }];
 }
 

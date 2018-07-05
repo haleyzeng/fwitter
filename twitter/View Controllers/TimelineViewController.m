@@ -14,7 +14,9 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 
-@interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate>
+@interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate, UIScrollViewDelegate>
+
+@property (assign, nonatomic) BOOL isMoreDataLoading;
 
 @end
 
@@ -40,20 +42,32 @@
 
 - (void)fetchTimeline {
     // Get timeline
-    [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
+    [[APIManager shared] getHomeTimelineOlderThan:nil withCompletion:^(NSArray *tweets, NSError *error) {
         if (tweets) {
             NSLog(@"Successfully loaded home timeline");
             self.timelineTweets = tweets;
-            for (Tweet *tweet in self.timelineTweets) {
-                BOOL text = tweet.isFavorited;
-                NSLog(@"Tweet isFavorited: %d", text);
-            }
-            NSLog(@"---------------------------");
         } else {
             NSLog(@"Error getting home timeline: %@", error.localizedDescription);
         }
         [self.tableView reloadData];
-        
+    }];
+}
+
+- (void)fetchOlderTimeline {
+    // get id of the last tweet in the timeline
+    Tweet *lastTweet = self.timelineTweets[self.timelineTweets.count - 1];
+    NSLog(@"Before refresh count: %lu", (unsigned long)self.timelineTweets.count);
+    NSString *lastTweetID = lastTweet.idString;
+    
+    [[APIManager shared] getHomeTimelineOlderThan:lastTweetID withCompletion:^(NSArray *tweets, NSError *error) {
+        if (error) {}
+        else {
+            
+            self.timelineTweets = [self.timelineTweets arrayByAddingObjectsFromArray:tweets];
+             NSLog(@"After refresh count: %lu", (unsigned long)self.timelineTweets.count);
+            self.isMoreDataLoading = NO;
+            [self.tableView reloadData];
+        }
     }];
 }
 
@@ -70,8 +84,19 @@
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"Rows: %lu", self.timelineTweets.count);
     return self.timelineTweets.count;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (!self.isMoreDataLoading) {
+        int totalContentHeight = self.tableView.contentSize.height;
+        int oneScreenHeight = self.tableView.bounds.size.height;
+        int scrollViewOffsetThreshold = totalContentHeight - oneScreenHeight;
+        if (scrollView.contentOffset.y > scrollViewOffsetThreshold && self.tableView.isDragging) {
+            self.isMoreDataLoading = YES;
+            [self fetchOlderTimeline];
+        }
+    }
 }
 
 
@@ -96,7 +121,6 @@
     
     [[APIManager shared] logout];
 }
-
 
 #pragma mark - Navigation
 

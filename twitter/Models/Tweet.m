@@ -49,7 +49,6 @@
         self.contentText = dictionary[@"text"];
         self.retweetCount = [dictionary[@"retweet_count"] intValue];
         self.favoriteCount = [dictionary[@"favorite_count"] intValue];
-        NSLog(@"Favorite count: %d", self.favoriteCount);
         self.isRetweeted = [dictionary[@"retweeted"] boolValue];
         self.isFavorited = [dictionary[@"favorited"] boolValue];
 
@@ -62,6 +61,11 @@
         // convert date to string with relative date
         // ex. 5s, 3h
         NSString *relativeDate = [NSDate shortTimeAgoSinceDate:date];
+        
+      // formatter.dateStyle = NSDateFormatterShortStyle;
+       // formatter.timeStyle = NSDateFormatterNoStyle;
+      // self.createdAtDate = [formatter stringFromDate:date];
+        
         self.createdAtDate = relativeDate;
     }
     
