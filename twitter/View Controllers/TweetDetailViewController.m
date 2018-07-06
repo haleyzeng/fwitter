@@ -90,7 +90,7 @@
 }
 
 - (void)didTweet:(Tweet *)tweet {
-    
+    [self.delegate didSendReplyInDetailView];
 }
 
 #pragma mark - Navigation

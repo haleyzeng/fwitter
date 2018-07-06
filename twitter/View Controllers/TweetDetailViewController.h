@@ -11,6 +11,7 @@
 #import "TweetCell.h"
 
 @protocol TweetDetailViewControllerDelegate
+- (void) didSendReplyInDetailView;
 - (void) didTapRetweetInDetailView:(TweetCell *)cell;
 - (void) didTapFavoriteInDetailView:(TweetCell *)cell;
 @end

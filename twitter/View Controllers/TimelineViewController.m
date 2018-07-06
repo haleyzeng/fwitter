@@ -133,6 +133,10 @@ BOOL isMoreDataLoading = NO;
     [self fetchTimeline];
 }
 
+- (void)didSendReplyInDetailView {
+    [self fetchTimeline];
+}
+
 - (void)didTapRetweetInDetailView:(TweetCell *)cell {
     NSLog(@"Retweet in detail view tapped");
     [cell handleRetweet];

@@ -13,4 +13,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray *timelineTweets;
 
+- (void)fetchTimeline;
+
 @end
