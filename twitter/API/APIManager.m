@@ -48,16 +48,18 @@ static NSString * const consumerSecret = @"uuaB1tnnrhggOHP1D2UWmoqrWdgjcfTmZZ5rB
     return self;
 }
 
-- (void)getHomeTimelineOlderThan:(NSString *)tweetID withCompletion:(void(^)(NSArray *tweets, NSError *error))completion {
+- (void)getHomeTimelineTweetsOlderThan:(NSString *)tweetID withCompletion:(void(^)(NSArray *tweets, NSError *error))completion {
     
     NSMutableDictionary *parameters = [NSMutableDictionary new];
     [parameters setObject:@20 forKey:@"count"];
+    
+    // if tweetID is nil, fetch most recent tweets
+    // if tweetID is not nil, fetch tweets older than that tweet
     if (tweetID)
         [parameters setObject:tweetID forKey:@"max_id"];
     
     [self GET:@"1.1/statuses/home_timeline.json"
     parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
-      //  NSLog(@"The return of the API Call: %@", tweetDictionaries);
        NSArray *tweets = [Tweet tweetsWithArray:tweetDictionaries];
        completion(tweets, nil);
        
@@ -111,9 +113,7 @@ static NSString * const consumerSecret = @"uuaB1tnnrhggOHP1D2UWmoqrWdgjcfTmZZ5rB
     NSLog(@"Posting retweet status to network...");
     NSLog(@"%@", urlString);
     
-    NSDictionary *parameters = nil;
-    
-    [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
+    [self POST:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
         Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
         NSLog(@"retweet api call succeeded");
         completion(tweet, nil);

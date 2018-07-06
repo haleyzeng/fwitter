@@ -11,10 +11,14 @@
 
 @interface ComposeViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *composeTextView;
+@property (weak, nonatomic) IBOutlet UILabel *characterCountLabel;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *tweetButton;
 
 @end
 
 @implementation ComposeViewController
+
+NSInteger characterLimit = 140;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -23,11 +27,31 @@
     // Do any additional setup after loading the view.
 }
 
-// returns whether or not to change the text
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    int characterLimit = 140;
-    NSString *newText = [self.composeTextView.text stringByReplacingCharactersInRange:range withString:text];
-    return newText.length < characterLimit;
+- (void)textViewDidChange:(UITextView *)textView {
+ 
+    NSInteger charactersUsed = (NSInteger) [textView.text length];
+    NSInteger charactersLeft = characterLimit - charactersUsed;
+        NSLog(@"%ld", charactersLeft);
+    
+    self.characterCountLabel.text = [NSString stringWithFormat:@"%ld", charactersLeft];
+    NSInteger characterWarningThreshold = 20;
+    
+
+    if (charactersLeft > characterWarningThreshold) {
+        self.characterCountLabel.alpha = 0;
+        self.tweetButton.enabled = YES;
+    }
+    else if (charactersLeft >= 0) {
+        self.characterCountLabel.alpha = 1;
+        self.characterCountLabel.textColor = [UIColor blackColor];
+        self.tweetButton.enabled = YES;
+    }
+    else {
+        self.characterCountLabel.alpha = 1;
+        self.characterCountLabel.textColor = [UIColor redColor];
+        self.tweetButton.enabled = NO;
+    }
+        
 }
 
 - (void)didReceiveMemoryWarning {

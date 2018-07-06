@@ -397,15 +397,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ROl-H8-PbD">
-                                <rect key="frame" x="0.0" y="64" width="375" height="188"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ROl-H8-PbD">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="603" id="WoY-Kb-tb9"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="140" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kG3-jh-eGo">
+                                <rect key="frame" x="338" y="270" width="29" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ROl-H8-PbD" firstAttribute="top" secondItem="W9s-pa-zNK" secondAttribute="top" id="Wk6-Vk-Qf4"/>
+                            <constraint firstItem="ROl-H8-PbD" firstAttribute="leading" secondItem="fah-l2-EJh" secondAttribute="leading" id="gjL-n7-Vjg"/>
+                            <constraint firstAttribute="trailing" secondItem="ROl-H8-PbD" secondAttribute="trailing" id="tHl-1R-ZDO"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="W9s-pa-zNK"/>
                     </view>
                     <navigationItem key="navigationItem" id="nAx-IX-q8l">
@@ -421,7 +435,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="characterCountLabel" destination="kG3-jh-eGo" id="rcx-da-vpm"/>
                         <outlet property="composeTextView" destination="ROl-H8-PbD" id="AYc-hi-l1V"/>
+                        <outlet property="tweetButton" destination="PjC-G7-LOn" id="YdD-Yb-lmd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jgu-yV-GMf" userLabel="First Responder" sceneMemberID="firstResponder"/>

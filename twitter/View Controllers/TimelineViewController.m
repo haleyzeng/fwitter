@@ -43,7 +43,7 @@
 
 - (void)fetchTimeline {
     // Get timeline
-    [[APIManager shared] getHomeTimelineOlderThan:nil withCompletion:^(NSArray *tweets, NSError *error) {
+    [[APIManager shared] getHomeTimelineTweetsOlderThan:nil withCompletion:^(NSArray *tweets, NSError *error) {
         if (tweets) {
             NSLog(@"Successfully loaded home timeline");
             self.timelineTweets = tweets;
@@ -60,7 +60,7 @@
     NSLog(@"Before refresh count: %lu", (unsigned long)self.timelineTweets.count);
     NSString *lastTweetID = lastTweet.idString;
     
-    [[APIManager shared] getHomeTimelineOlderThan:lastTweetID withCompletion:^(NSArray *tweets, NSError *error) {
+    [[APIManager shared] getHomeTimelineTweetsOlderThan:lastTweetID withCompletion:^(NSArray *tweets, NSError *error) {
         if (error) {}
         else {
             
