@@ -14,14 +14,17 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "TweetDetailViewController.h"
+#import "InfiniteScrollActivityView.h"
 
 @interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate, UIScrollViewDelegate, TweetDetailViewControllerDelegate>
 
 @property (assign, nonatomic) BOOL isMoreDataLoading;
+@property (strong, nonatomic) InfiniteScrollActivityView *activityIndicator;
 
 @end
 
 @implementation TimelineViewController
+BOOL isMoreDataLoading = NO;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -37,8 +40,21 @@
     // attach refresh controller to refresh functionality
     [refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
     
-    // add 
+    // add refresh controller to view
     [self.tableView insertSubview:refreshControl atIndex:0];
+    
+    // initialize infinite scroll activity indicator
+    CGRect frame = CGRectMake(0, self.tableView.contentSize.height, self.tableView.bounds.size.width, [InfiniteScrollActivityView defaultHeight]);
+    self.activityIndicator = [[InfiniteScrollActivityView alloc] initWithFrame:frame];
+    
+    // hide and add activity indicator to view
+    self.activityIndicator.hidden = YES;
+    [self.tableView addSubview:self.activityIndicator];
+    
+    // add edge space to bottom of tableView
+    UIEdgeInsets insets = self.tableView.contentInset;
+    insets.bottom = [InfiniteScrollActivityView defaultHeight];
+    self.tableView.contentInset = insets;
 }
 
 - (void)fetchTimeline {
@@ -57,15 +73,14 @@
 - (void)fetchOlderTimeline {
     // get id of the last tweet in the timeline
     Tweet *lastTweet = self.timelineTweets[self.timelineTweets.count - 1];
-    NSLog(@"Before refresh count: %lu", (unsigned long)self.timelineTweets.count);
     NSString *lastTweetID = lastTweet.idString;
     
     [[APIManager shared] getHomeTimelineTweetsOlderThan:lastTweetID withCompletion:^(NSArray *tweets, NSError *error) {
         if (error) {}
         else {
             
-            self.timelineTweets = [self.timelineTweets arrayByAddingObjectsFromArray:tweets];
-             NSLog(@"After refresh count: %lu", (unsigned long)self.timelineTweets.count);
+            self.timelineTweets = [self.timelineTweets arrayByAddingObjectsFromArray:tweets];\
+            [self.activityIndicator stopAnimating];
             self.isMoreDataLoading = NO;
             [self.tableView reloadData];
         }
@@ -94,6 +109,12 @@
         int oneScreenHeight = self.tableView.bounds.size.height;
         int scrollViewOffsetThreshold = totalContentHeight - oneScreenHeight;
         if (scrollView.contentOffset.y > scrollViewOffsetThreshold && self.tableView.isDragging) {
+            
+            // update position of loading wheel and animate
+            CGRect frame = CGRectMake(0, self.tableView.contentSize.height, self.tableView.bounds.size.width, [InfiniteScrollActivityView defaultHeight]);
+            self.activityIndicator.frame = frame;
+            [self.activityIndicator startAnimating];
+            
             self.isMoreDataLoading = YES;
             [self fetchOlderTimeline];
         }
