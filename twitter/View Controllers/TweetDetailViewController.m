@@ -10,8 +10,9 @@
 #import "UIImageView+AFNetworking.h"
 #import "APIManager.h"
 #import "TimelineViewController.h"
+#import "ComposeViewController.h"
 
-@interface TweetDetailViewController ()
+@interface TweetDetailViewController () <ComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *profilePictureView;
 @property (weak, nonatomic) IBOutlet UILabel *displayNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *screenNameLabel;
@@ -88,14 +89,20 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+- (void)didTweet:(Tweet *)tweet {
+    
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    UINavigationController *navigationController = [segue destinationViewController];
+    
+    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+    composeController.delegate = self;
+    composeController.replyingToTweet = self.tweet;
 }
-*/
+
 
 @end

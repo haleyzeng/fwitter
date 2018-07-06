@@ -378,6 +378,9 @@
                                             <constraint firstAttribute="height" constant="30" id="yUs-ca-R6A"/>
                                         </constraints>
                                         <state key="normal" image="reply-icon"/>
+                                        <connections>
+                                            <segue destination="WJP-Gk-feT" kind="presentation" identifier="replyFromDetail" id="cLK-Ok-bLl"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TV7-Ok-90l">
                                         <rect key="frame" x="92.5" y="0.0" width="30" height="30"/>
@@ -557,6 +560,6 @@
         <image name="retweet-icon-green" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="MQM-t8-35L"/>
+        <segue reference="cLK-Ok-bLl"/>
     </inferredMetricsTieBreakers>
 </document>
