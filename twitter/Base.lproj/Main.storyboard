@@ -59,7 +59,6 @@
         <!--Item 2-->
         <scene sceneID="KnN-v5-ubt">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="CBP-PR-Awy" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="xd0-ma-IIj" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fJd-qT-Tlg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -69,16 +68,17 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item 2" id="F1n-xP-x6Z"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CBP-PR-Awy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1985" y="-691"/>
         </scene>
         <!--Item 1-->
         <scene sceneID="tvl-9H-AVn">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4Kr-dB-kYw" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="D8T-hb-8KM" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item 1" id="6Wc-Qp-OT5"/>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Kr-dB-kYw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1985" y="-1356"/>
         </scene>
@@ -163,7 +163,7 @@
                                                         <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="didTapReply:" destination="B6l-ry-bCU" eventType="touchUpInside" id="FQM-U4-fiV"/>
+                                                        <segue destination="WJP-Gk-feT" kind="presentation" identifier="reply" id="MQM-t8-35L"/>
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8jz-Tk-EW4">
@@ -556,4 +556,7 @@
         <image name="retweet-icon" width="30" height="30"/>
         <image name="retweet-icon-green" width="30" height="30"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="MQM-t8-35L"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -7,14 +7,14 @@
 //
 
 #import "TimelineViewController.h"
-#import "APIManager.h"
-#import "Tweet.h"
-#import "TweetCell.h"
 #import "ComposeViewController.h"
-#import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "TweetDetailViewController.h"
 #import "InfiniteScrollActivityView.h"
+#import "APIManager.h"
+#import "Tweet.h"
+#import "TweetCell.h"
+#import "AppDelegate.h"
 
 @interface TimelineViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate, UIScrollViewDelegate, TweetDetailViewControllerDelegate>
 
@@ -71,15 +71,14 @@ BOOL isMoreDataLoading = NO;
 }
 
 - (void)fetchOlderTimeline {
-    // get id of the last tweet in the timeline
+    // get id of the oldest tweet in the timeline
     Tweet *lastTweet = self.timelineTweets[self.timelineTweets.count - 1];
     NSString *lastTweetID = lastTweet.idString;
     
     [[APIManager shared] getHomeTimelineTweetsOlderThan:lastTweetID withCompletion:^(NSArray *tweets, NSError *error) {
         if (error) {}
         else {
-            
-            self.timelineTweets = [self.timelineTweets arrayByAddingObjectsFromArray:tweets];\
+            self.timelineTweets = [self.timelineTweets arrayByAddingObjectsFromArray:tweets];
             [self.activityIndicator stopAnimating];
             self.isMoreDataLoading = NO;
             [self.tableView reloadData];
@@ -91,6 +90,8 @@ BOOL isMoreDataLoading = NO;
     [self fetchTimeline];
     [refreshControl endRefreshing];
 }
+
+#pragma mark - UITableViewDelegate
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     Tweet *tweet = self.timelineTweets[indexPath.row];
@@ -156,6 +157,7 @@ BOOL isMoreDataLoading = NO;
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    NSLog(@"Segueing...");
     
     // segue from tapping a tweet to the detail view
     if ([segue.identifier isEqualToString:@"tweetDetail"]) {
@@ -165,12 +167,19 @@ BOOL isMoreDataLoading = NO;
         tweetDetailViewController.tweet = tappedCell.tweet;
         tweetDetailViewController.delegate = self;
     }
-    // segue from tapping compose button to compose screen
     else {
         UINavigationController *navigationController = [segue destinationViewController];
     
         ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
         composeController.delegate = self;
+        
+        if ([segue.identifier isEqualToString:@"reply"]) {
+            UIButton *button = sender;
+            TweetCell *tappedCell = (TweetCell *) [[button superview] superview];
+            
+            composeController.replyingToTweet = tappedCell.tweet;
+        }
+            
     }
 }
 

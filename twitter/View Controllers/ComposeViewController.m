@@ -23,8 +23,11 @@ NSInteger characterLimit = 140;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.composeTextView.delegate = self;
+    if (self.replyingToTweet != nil) {
+        NSString *replyingToUsername = self.replyingToTweet.user.screenName;
+        self.composeTextView.text = [@"@" stringByAppendingString:replyingToUsername];
+    }
     
-    // Do any additional setup after loading the view.
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
@@ -67,7 +70,7 @@ NSInteger characterLimit = 140;
 }
 
 - (IBAction)postTweet:(id)sender {
-    [[APIManager shared] postStatusWithText:self.composeTextView.text withCompletion:^(Tweet *tweet, NSError *error) {
+    [[APIManager shared] postStatusWithText:self.composeTextView.text inReplyTo:self.replyingToTweet withCompletion:^(Tweet *tweet, NSError *error) {
          if (error != nil) {
              NSLog(@"Error posting tweet: %@", error.localizedDescription);
          }

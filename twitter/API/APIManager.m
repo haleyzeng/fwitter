@@ -68,12 +68,19 @@ static NSString * const consumerSecret = @"uuaB1tnnrhggOHP1D2UWmoqrWdgjcfTmZZ5rB
    }];
 }
 
-- (void)postStatusWithText:(NSString *)text withCompletion:(void (^)(Tweet *tweet, NSError *error))completion {
+- (void)postStatusWithText:(NSString *)text inReplyTo:(Tweet *)replyingToTweet withCompletion:(void (^)(Tweet *tweet, NSError *error))completion {
     
     NSString *urlString = @"1.1/statuses/update.json";
     
     // what to send in POST request
-    NSDictionary *parameters = @{@"status": text};
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    
+    [parameters setObject:text forKey:@"status"];
+    if (replyingToTweet != nil) {
+        NSString *tweetID = replyingToTweet.idString;
+        [parameters setObject:tweetID forKey:@"in_reply_to_status_id"];
+    }
+    NSLog(@"dict: %@", parameters);
     
     [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
         Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
