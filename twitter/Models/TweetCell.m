@@ -56,6 +56,7 @@
     [self.retweetButton setTitle:[NSString stringWithFormat:@"%d", self.tweet.retweetCount] forState:UIControlStateNormal];
     [self.favoriteButton setTitle:[NSString stringWithFormat:@"%d", self.tweet.favoriteCount] forState:UIControlStateNormal];
     
+    // set retweet and favorite buttons to correct state
     if (self.tweet.isRetweeted)
         self.retweetButton.selected = YES;
     else
@@ -64,6 +65,24 @@
         self.favoriteButton.selected = YES;
     else
         self.favoriteButton.selected = NO;
+
+   
+
+    // if applicable, add "*user* retweeted" to top
+    if (self.tweet.retweetedByUser) { // not nil
+        self.profileImageToTopConstraint.constant = 29;
+        self.retweetedByWhoLabel.text =
+        [self.tweet.retweetedByUser.name stringByAppendingString:@" retweeted"];
+        self.retweetedByWhoImage.hidden = NO;
+        self.retweetedByWhoLabel.hidden = NO;
+    }
+    else {
+        self.profileImageToTopConstraint.constant = 11;
+        self.retweetedByWhoLabel.text = nil;
+        
+        self.retweetedByWhoImage.hidden = YES;
+        self.retweetedByWhoLabel.hidden = YES;
+    }
 }
 - (IBAction)didTapReply:(id)sender {
 }

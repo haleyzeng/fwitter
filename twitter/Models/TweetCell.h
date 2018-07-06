@@ -16,6 +16,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *tweetContentLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *retweetedByWhoLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *retweetedByWhoImage;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *profileImageToTopConstraint;
+
 @property (weak, nonatomic) IBOutlet UIButton *replyButton;
 @property (weak, nonatomic) IBOutlet UIButton *retweetButton;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
