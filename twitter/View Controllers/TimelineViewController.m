@@ -83,7 +83,9 @@ BOOL isMoreDataLoading = NO;
     
     [[APIManager shared] getHomeTimelineTweetsOlderThan:lastTweetID
                                          withCompletion:^(NSArray *tweets, NSError *error) {
-        if (error) {}
+        if (error) {
+            NSLog(@"Error getting older home timeline: %@", error.localizedDescription);
+        }
         else {
             self.timelineTweets = [self.timelineTweets arrayByAddingObjectsFromArray:tweets];
             [self.activityIndicator stopAnimating];
