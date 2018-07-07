@@ -2,7 +2,7 @@
 
 **Fwitter** is a basic twitter app to read and compose tweets the [Twitter API](https://apps.twitter.com/).
 
-Time spent: **X** hours spent in total
+Time spent: **25** hours spent in total
 
 ## User Stories
 
@@ -45,17 +45,18 @@ The following **additional** features are implemented:
 
 - [x] When composing, the countdown only appears when you are approaching the limit 
 - [x] When composing, the countdown will go negative and disable the Tweet button
+- [x] Tweets that are retweeted show who retweeted them
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1.
-2.
+1. Best practices for segueing between views
+2. Getting links to work (making them clickable and connecting them to a webview)
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/CUgECgZ.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -68,6 +69,7 @@ Describe any challenges encountered while building the app.
 List an 3rd party libraries, icons, graphics, or other assets you used in your app.
 
 - [AFNetworking](https://github.com/AFNetworking/AFNetworking) - networking task library
+- [DateTools](https://github.com/MatthewYork/DateTools) - date formatting library
 
 ## License
 
