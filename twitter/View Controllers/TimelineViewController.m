@@ -38,13 +38,18 @@ BOOL isMoreDataLoading = NO;
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     
     // attach refresh controller to refresh functionality
-    [refreshControl addTarget:self action:@selector(beginRefresh:) forControlEvents:UIControlEventValueChanged];
+    [refreshControl addTarget:self
+                       action:@selector(beginRefresh:)
+             forControlEvents:UIControlEventValueChanged];
     
     // add refresh controller to view
     [self.tableView insertSubview:refreshControl atIndex:0];
     
     // initialize infinite scroll activity indicator
-    CGRect frame = CGRectMake(0, self.tableView.contentSize.height, self.tableView.bounds.size.width, [InfiniteScrollActivityView defaultHeight]);
+    CGRect frame = CGRectMake(0,
+                              self.tableView.contentSize.height,
+                              self.tableView.bounds.size.width,
+                              [InfiniteScrollActivityView defaultHeight]);
     self.activityIndicator = [[InfiniteScrollActivityView alloc] initWithFrame:frame];
     
     // hide and add activity indicator to view
@@ -59,7 +64,8 @@ BOOL isMoreDataLoading = NO;
 
 - (void)fetchTimeline {
     // Get timeline
-    [[APIManager shared] getHomeTimelineTweetsOlderThan:nil withCompletion:^(NSArray *tweets, NSError *error) {
+    [[APIManager shared] getHomeTimelineTweetsOlderThan:nil
+                                         withCompletion:^(NSArray *tweets, NSError *error) {
         if (tweets) {
             NSLog(@"Successfully loaded home timeline");
             self.timelineTweets = tweets;
@@ -75,7 +81,8 @@ BOOL isMoreDataLoading = NO;
     Tweet *lastTweet = self.timelineTweets[self.timelineTweets.count - 1];
     NSString *lastTweetID = lastTweet.idString;
     
-    [[APIManager shared] getHomeTimelineTweetsOlderThan:lastTweetID withCompletion:^(NSArray *tweets, NSError *error) {
+    [[APIManager shared] getHomeTimelineTweetsOlderThan:lastTweetID
+                                         withCompletion:^(NSArray *tweets, NSError *error) {
         if (error) {}
         else {
             self.timelineTweets = [self.timelineTweets arrayByAddingObjectsFromArray:tweets];
@@ -84,66 +91,6 @@ BOOL isMoreDataLoading = NO;
             [self.tableView reloadData];
         }
     }];
-}
-
-- (void)beginRefresh:(UIRefreshControl *)refreshControl {
-    [self fetchTimeline];
-    [refreshControl endRefreshing];
-}
-
-#pragma mark - UITableViewDelegate
-
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    Tweet *tweet = self.timelineTweets[indexPath.row];
-    TweetCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"TweetCell"];
-    cell.tweet = tweet;
-    return cell;
-}
-
-- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.timelineTweets.count;
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (!self.isMoreDataLoading) {
-        int totalContentHeight = self.tableView.contentSize.height;
-        int oneScreenHeight = self.tableView.bounds.size.height;
-        int scrollViewOffsetThreshold = totalContentHeight - oneScreenHeight;
-        if (scrollView.contentOffset.y > scrollViewOffsetThreshold && self.tableView.isDragging) {
-            
-            // update position of loading wheel and animate
-            CGRect frame = CGRectMake(0, self.tableView.contentSize.height, self.tableView.bounds.size.width, [InfiniteScrollActivityView defaultHeight]);
-            self.activityIndicator.frame = frame;
-            [self.activityIndicator startAnimating];
-            
-            self.isMoreDataLoading = YES;
-            [self fetchOlderTimeline];
-        }
-    }
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-// tweeted from compose view
-- (void)didTweet:(Tweet *)tweet {
-    [self fetchTimeline];
-}
-
-- (void)didSendReplyInDetailView {
-    [self fetchTimeline];
-}
-
-- (void)didTapRetweetInDetailView:(TweetCell *)cell {
-    NSLog(@"Retweet in detail view tapped");
-    [cell handleRetweet];
-}
-
-- (void)didTapFavoriteInDetailView:(TweetCell *)cell {
-    [cell handleFavorite];
 }
 
 - (IBAction)didTapLogout:(id)sender {
@@ -157,10 +104,80 @@ BOOL isMoreDataLoading = NO;
     [[APIManager shared] logout];
 }
 
+- (void)beginRefresh:(UIRefreshControl *)refreshControl {
+    [self fetchTimeline];
+    [refreshControl endRefreshing];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Infinite Scroll
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (!self.isMoreDataLoading) {
+        int totalContentHeight = self.tableView.contentSize.height;
+        int oneScreenHeight = self.tableView.bounds.size.height;
+        int scrollViewOffsetThreshold = totalContentHeight - oneScreenHeight;
+        if (scrollView.contentOffset.y > scrollViewOffsetThreshold && self.tableView.isDragging) {
+            
+            // update position of loading wheel and animate
+            CGRect frame = CGRectMake(0,
+                                      self.tableView.contentSize.height,
+                                      self.tableView.bounds.size.width,
+                                      [InfiniteScrollActivityView defaultHeight]);
+            self.activityIndicator.frame = frame;
+            [self.activityIndicator startAnimating];
+            
+            self.isMoreDataLoading = YES;
+            [self fetchOlderTimeline];
+        }
+    }
+}
+
+#pragma mark - UITableViewDelegate
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView
+                 cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    Tweet *tweet = self.timelineTweets[indexPath.row];
+    TweetCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"TweetCell"];
+    cell.tweet = tweet;
+    return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView
+ numberOfRowsInSection:(NSInteger)section {
+    return self.timelineTweets.count;
+}
+
+#pragma mark - ComposeViewControllerDelegate
+
+// tweeted from compose view
+- (void)didTweet:(Tweet *)tweet {
+    [self fetchTimeline];
+}
+
+#pragma mark - TweetDetailViewControllerDelegate
+- (void)didSendReplyInDetailView {
+    [self fetchTimeline];
+}
+
+- (void)didTapRetweetInDetailView:(TweetCell *)cell {
+    NSLog(@"Retweet in detail view tapped");
+    [cell handleRetweet];
+}
+
+- (void)didTapFavoriteInDetailView:(TweetCell *)cell {
+    [cell handleFavorite];
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue
+                 sender:(id)sender {
     NSLog(@"Segueing...");
     
     // segue from tapping a tweet to the detail view

@@ -34,7 +34,6 @@ NSInteger characterLimit = 140;
  
     NSInteger charactersUsed = (NSInteger) [textView.text length];
     NSInteger charactersLeft = characterLimit - charactersUsed;
-        NSLog(@"%ld", charactersLeft);
     
     self.characterCountLabel.text = [NSString stringWithFormat:@"%ld", charactersLeft];
     NSInteger characterWarningThreshold = 20;
@@ -70,16 +69,18 @@ NSInteger characterLimit = 140;
 }
 
 - (IBAction)postTweet:(id)sender {
-    [[APIManager shared] postStatusWithText:self.composeTextView.text inReplyTo:self.replyingToTweet withCompletion:^(Tweet *tweet, NSError *error) {
-         if (error != nil) {
-             NSLog(@"Error posting tweet: %@", error.localizedDescription);
-         }
-         else {
-             NSLog(@"Tweet sent: %@", tweet.contentText);
-             [self closeComposeView];
-             [self.delegate didTweet:tweet];
-         }
-     }];
+    [[APIManager shared] postStatusWithText:self.composeTextView.text
+                                  inReplyTo:self.replyingToTweet
+                             withCompletion:^(Tweet *tweet, NSError *error) {
+                                 if (error != nil) {
+                                     NSLog(@"Error posting tweet: %@", error.localizedDescription);
+                                 }
+                                 else {
+                                     NSLog(@"Tweet sent: %@", tweet.contentText);
+                                     [self closeComposeView];
+                                     [self.delegate didTweet:tweet];
+                                 }
+                             }];
 }
 
 

@@ -14,12 +14,17 @@
 
 + (instancetype)shared;
 
-- (void)getHomeTimelineTweetsOlderThan:(NSString *)tweetID withCompletion:(void(^)(NSArray *tweets, NSError *error))completion;
+- (void)getHomeTimelineTweetsOlderThan:(NSString *)tweetID
+                        withCompletion:(void(^)(NSArray *tweets, NSError *error))completion;
 
-- (void)postStatusWithText:(NSString *)text inReplyTo:(Tweet *)replyingToTweet withCompletion:(void (^)(Tweet *tweet, NSError *error))completion;
+- (void)postStatusWithText:(NSString *)text
+                 inReplyTo:(Tweet *)replyingToTweet
+            withCompletion:(void (^)(Tweet *tweet, NSError *error))completion;
 
-- (void)postFavoriteStatus:(Tweet *)tweet withCompletion:(void (^)(Tweet *tweet, NSError *error))completion;
+- (void)postFavoriteStatus:(Tweet *)tweet
+            withCompletion:(void (^)(Tweet *tweet, NSError *error))completion;
 
-- (void)postRetweetStatus:(Tweet *)tweet withCompletion:(void (^)(Tweet *tweet, NSError *error))completion;
+- (void)postRetweetStatus:(Tweet *)tweet
+           withCompletion:(void (^)(Tweet *tweet, NSError *error))completion;
 
 @end

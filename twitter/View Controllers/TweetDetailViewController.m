@@ -44,21 +44,24 @@
     if (self.tweet.user.profileURL != nil) {
         NSURLRequest *request = [NSURLRequest requestWithURL:self.tweet.user.profileURL];
         __weak TweetDetailViewController *weakSelf = self;
-        [self.profilePictureView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *imageRequest, NSHTTPURLResponse *imageResponse, UIImage *image) {
-            // imageResponse will be nil if the image is cached
-            if (imageResponse) {
-                weakSelf.profilePictureView.alpha = 0.0;
-                weakSelf.profilePictureView.image = image;
-                
-                //Animate UIImageView back to alpha 1 over 0.3sec
-                [UIView animateWithDuration:0.3 animations:^{
-                    weakSelf.profilePictureView.alpha = 1.0;
-                }];
-            }
-            else {
-                weakSelf.profilePictureView.image = image;
-            }
-        } failure:^(NSURLRequest *request, NSHTTPURLResponse * response, NSError *error) {}];
+        [self.profilePictureView setImageWithURLRequest:request
+                                       placeholderImage:nil
+                                                success:^(NSURLRequest *imageRequest, NSHTTPURLResponse *imageResponse, UIImage *image) {
+                                                    // imageResponse will be nil if the image is cached
+                                                    if (imageResponse) {
+                                                        weakSelf.profilePictureView.alpha = 0.0;
+                                                        weakSelf.profilePictureView.image = image;
+                                                        
+                                                        //Animate UIImageView back to alpha 1 over 0.3sec
+                                                        [UIView animateWithDuration:0.3 animations:^{
+                                                            weakSelf.profilePictureView.alpha = 1.0;
+                                                        }];
+                                                    }
+                                                    else {
+                                                        weakSelf.profilePictureView.image = image;
+                                                    }
+                                                }
+                                                failure:^(NSURLRequest *request, NSHTTPURLResponse * response, NSError *error) {}];
     }
     
     self.retweetCountLabel.text = [NSString stringWithFormat:@"%d", self.tweet.retweetCount];
@@ -96,7 +99,8 @@
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue
+                 sender:(id)sender {
     UINavigationController *navigationController = [segue destinationViewController];
     
     ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;

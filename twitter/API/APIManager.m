@@ -48,7 +48,8 @@ static NSString * const consumerSecret = @"uuaB1tnnrhggOHP1D2UWmoqrWdgjcfTmZZ5rB
     return self;
 }
 
-- (void)getHomeTimelineTweetsOlderThan:(NSString *)tweetID withCompletion:(void(^)(NSArray *tweets, NSError *error))completion {
+- (void)getHomeTimelineTweetsOlderThan:(NSString *)tweetID
+                        withCompletion:(void(^)(NSArray *tweets, NSError *error))completion {
     
     NSMutableDictionary *parameters = [NSMutableDictionary new];
     [parameters setObject:@20 forKey:@"count"];
@@ -59,16 +60,20 @@ static NSString * const consumerSecret = @"uuaB1tnnrhggOHP1D2UWmoqrWdgjcfTmZZ5rB
         [parameters setObject:tweetID forKey:@"max_id"];
     
     [self GET:@"1.1/statuses/home_timeline.json"
-    parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
-       NSArray *tweets = [Tweet tweetsWithArray:tweetDictionaries];
-       completion(tweets, nil);
-       
-   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-       completion(nil, error);
-   }];
+   parameters:parameters
+     progress:nil
+      success:^(NSURLSessionDataTask * _Nonnull task, NSArray *  _Nullable tweetDictionaries) {
+          NSArray *tweets = [Tweet tweetsWithArray:tweetDictionaries];
+          completion(tweets, nil);
+          
+      } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+          completion(nil, error);
+      }];
 }
 
-- (void)postStatusWithText:(NSString *)text inReplyTo:(Tweet *)replyingToTweet withCompletion:(void (^)(Tweet *tweet, NSError *error))completion {
+- (void)postStatusWithText:(NSString *)text
+                 inReplyTo:(Tweet *)replyingToTweet
+            withCompletion:(void (^)(Tweet *tweet, NSError *error))completion {
     
     NSString *urlString = @"1.1/statuses/update.json";
     
@@ -82,16 +87,20 @@ static NSString * const consumerSecret = @"uuaB1tnnrhggOHP1D2UWmoqrWdgjcfTmZZ5rB
     }
     NSLog(@"dict: %@", parameters);
     
-    [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
-        Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
-        completion(tweet, nil);
-        }
+    [self POST:urlString
+    parameters:parameters
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
+           Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
+           completion(tweet, nil);
+       }
        failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        completion(nil, error);
+           completion(nil, error);
        }];
 }
 
-- (void)postFavoriteStatus:(Tweet *)tweet withCompletion:(void (^)(Tweet *tweet, NSError *error))completion {
+- (void)postFavoriteStatus:(Tweet *)tweet
+            withCompletion:(void (^)(Tweet *tweet, NSError *error))completion {
     
     NSString *urlString;
     if (tweet.isFavorited) // if we are posting a Favorite
@@ -101,15 +110,20 @@ static NSString * const consumerSecret = @"uuaB1tnnrhggOHP1D2UWmoqrWdgjcfTmZZ5rB
     
     NSDictionary *parameters = @{@"id": tweet.idString};
     
-    [self POST:urlString parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
-        Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
-        completion(tweet, nil);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        completion(nil, error);
-    }];
+    [self POST:urlString
+    parameters:parameters
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
+           Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
+           completion(tweet, nil);
+       }
+       failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           completion(nil, error);
+       }];
 }
 
-- (void)postRetweetStatus:(Tweet *)tweet withCompletion:(void (^)(Tweet *, NSError *))completion {
+- (void)postRetweetStatus:(Tweet *)tweet
+           withCompletion:(void (^)(Tweet *, NSError *))completion {
     NSString *urlString;
     
     if (tweet.isRetweeted) // if we are posting a Retweet
@@ -120,14 +134,18 @@ static NSString * const consumerSecret = @"uuaB1tnnrhggOHP1D2UWmoqrWdgjcfTmZZ5rB
     NSLog(@"Posting retweet status to network...");
     NSLog(@"%@", urlString);
     
-    [self POST:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
-        Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
-        NSLog(@"retweet api call succeeded");
-        completion(tweet, nil);
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"retweet api call failed");
-        completion(nil, error);
-    }];
+    [self POST:urlString
+    parameters:nil
+      progress:nil
+       success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable tweetDictionary) {
+           Tweet *tweet = [[Tweet alloc]initWithDictionary:tweetDictionary];
+           NSLog(@"retweet api call succeeded");
+           completion(tweet, nil);
+       }
+       failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+           NSLog(@"retweet api call failed");
+           completion(nil, error);
+       }];
     
 }
 
